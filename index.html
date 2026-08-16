@@ -70,12 +70,15 @@
       .workout-head small { color: var(--mint); display: block; margin-top: 3px; }
       .time { background: rgba(255,255,255,.12); border-radius: 99px; padding: 5px 8px; font-size: .7rem; font-weight: 800; white-space: nowrap; }
       .exercise-list { padding: 8px 22px 15px; }
-      .exercise { display: grid; grid-template-columns: 21px 1fr auto; gap: 10px; align-items: center; padding: 13px 0; border-bottom: 1px solid #ecece7; }
+      .exercise { display: grid; grid-template-columns: 21px 1fr auto auto; gap: 10px; align-items: center; padding: 13px 0; border-bottom: 1px solid #ecece7; }
       .exercise:last-child { border-bottom: 0; }
       input[type="checkbox"] { accent-color: #4b753b; width: 16px; height: 16px; cursor: pointer; }
       .exercise label { font-size: .9rem; font-weight: 700; cursor: pointer; }
       .exercise label span { display: block; color: #758075; font-size: .72rem; font-weight: 500; margin-top: 2px; }
       .sets { color: #506453; font-size: .77rem; font-weight: 800; white-space: nowrap; }
+      .weight-field { display: flex; align-items: center; gap: 3px; color: #758075; font-size: .72rem; font-weight: 700; }
+      .weight-input { width: 54px; padding: 6px 5px; border: 1px solid #d5d9d3; border-radius: 7px; background: #fafbf8; color: #263229; font: inherit; font-size: .78rem; font-weight: 750; text-align: right; }
+      .weight-input:focus { outline: 2px solid #9de0bd; outline-offset: 1px; border-color: #638c70; }
       .condition-grid { display: grid; grid-template-columns: 1.1fr .9fr .9fr; gap: 16px; }
       .condition { border-radius: var(--radius); padding: 24px; min-height: 250px; }
       .condition h3 { font-size: 1.35rem; letter-spacing: -.05em; margin: 6px 0 10px; }
@@ -125,6 +128,8 @@
         main { padding-top: 42px; }
         .workout-head { padding: 18px; }
         .exercise-list { padding: 6px 18px 12px; }
+        .exercise { grid-template-columns: 21px 1fr auto; }
+        .weight-field { grid-column: 2 / -1; justify-self: start; margin-top: -6px; }
         footer .shell { display: block; }
       }
     </style>
@@ -231,7 +236,9 @@
     <footer><div class="shell"><span>NATURAL HYPERTROPHY PLAN</span><span>3 lifting · 2 HIIT · 1 Zone 2</span></div></footer>
     <script>
       const key = 'build-routine-checks';
+      const weightKey = 'build-routine-weights';
       const stored = JSON.parse(localStorage.getItem(key) || '{}');
+      const storedWeights = JSON.parse(localStorage.getItem(weightKey) || '{}');
       document.querySelectorAll('input[type="checkbox"]').forEach(box => {
         box.checked = Boolean(stored[box.id]);
         box.addEventListener('change', () => {
@@ -239,6 +246,21 @@
           current[box.id] = box.checked;
           localStorage.setItem(key, JSON.stringify(current));
         });
+        const label = document.querySelector(`label[for="${box.id}"]`);
+        const exercise = box.closest('.exercise');
+        const weightField = document.createElement('label');
+        weightField.className = 'weight-field';
+        weightField.htmlFor = `${box.id}-weight`;
+        weightField.setAttribute('aria-label', `Working weight for ${label.textContent.trim()}`);
+        weightField.innerHTML = `<input class="weight-input" id="${box.id}-weight" type="number" inputmode="decimal" min="0" step="0.5" placeholder="kg" /> kg`;
+        const weightInput = weightField.querySelector('input');
+        weightInput.value = storedWeights[box.id] || '';
+        weightInput.addEventListener('input', () => {
+          const current = JSON.parse(localStorage.getItem(weightKey) || '{}');
+          current[box.id] = weightInput.value;
+          localStorage.setItem(weightKey, JSON.stringify(current));
+        });
+        exercise.append(weightField);
       });
     </script>
   </body>
