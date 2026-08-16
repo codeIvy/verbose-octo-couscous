@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#101913" />
+    <title>Progress charts — Natural Hypertrophy Plan</title>
+    <style>
+      :root { --ink: #eff3ec; --night: #101913; --paper: #f5f4ee; --line: #dcded7; --muted: #687568; --lime: #d4f460; --mint: #9de0bd; }
+      * { box-sizing: border-box; }
+      body { margin: 0; background: var(--paper); color: var(--night); font: 16px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .shell { width: min(100% - 40px, 980px); margin: auto; }
+      header { background: var(--night); color: var(--ink); padding: 22px 0 28px; }
+      .top { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+      .brand { font-size: .78rem; font-weight: 850; letter-spacing: .12em; text-transform: uppercase; }
+      .back { color: var(--night); background: var(--lime); padding: 9px 12px; border-radius: 8px; text-decoration: none; font-size: .78rem; font-weight: 850; }
+      h1 { margin: 34px 0 7px; font-size: clamp(2rem, 5vw, 3.4rem); letter-spacing: -.065em; line-height: 1; }
+      .intro { margin: 0; max-width: 650px; color: #b8c6b9; }
+      main { padding: 44px 0 70px; }
+      .controls { display: flex; align-items: end; justify-content: space-between; gap: 18px; margin-bottom: 20px; }
+      label { display: block; color: var(--muted); font-size: .72rem; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
+      select { display: block; width: min(100%, 390px); margin-top: 7px; padding: 11px 12px; border: 1px solid #cfd4cc; border-radius: 8px; background: white; color: var(--night); font: inherit; }
+      .notice { margin: 0; color: var(--muted); font-size: .83rem; }
+      .card { border: 1px solid var(--line); border-radius: 18px; background: white; overflow: hidden; }
+      .metrics { display: grid; grid-template-columns: repeat(3, 1fr); border-bottom: 1px solid var(--line); }
+      .metric { padding: 20px 22px; border-right: 1px solid var(--line); }
+      .metric:last-child { border-right: 0; }
+      .metric small { display: block; color: var(--muted); font-size: .69rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+      .metric strong { display: block; margin-top: 5px; font-size: 1.6rem; letter-spacing: -.055em; }
+      .chart-wrap { min-height: 390px; padding: 20px; }
+      svg { display: block; width: 100%; height: auto; overflow: visible; }
+      .empty { min-height: 320px; display: grid; place-content: center; text-align: center; color: var(--muted); padding: 30px; }
+      .empty strong { display: block; color: var(--night); font-size: 1.2rem; margin-bottom: 7px; }
+      .note { margin-top: 18px; padding: 16px 18px; border-radius: 12px; background: #e7ece2; color: #526152; font-size: .87rem; }
+      @media (max-width: 600px) { .shell { width: min(100% - 28px, 980px); } header { padding-bottom: 23px; } h1 { margin-top: 28px; } .controls { display: block; } .notice { margin-top: 14px; } .metrics { grid-template-columns: 1fr; } .metric { border-right: 0; border-bottom: 1px solid var(--line); padding: 15px 18px; } .metric:last-child { border-bottom: 0; } .chart-wrap { min-height: 300px; padding: 9px; } }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="shell">
+        <div class="top"><span class="brand">Natural hypertrophy plan</span><a class="back" href="index.html">← Back to plan</a></div>
+        <h1>Load progression</h1>
+        <p class="intro">Each time you change an exercise’s kg field on the plan page, a local history point is recorded here.</p>
+      </div>
+    </header>
+    <main class="shell">
+      <div class="controls"><label for="exercise-select">Exercise<select id="exercise-select"></select></label><p class="notice">Stored only in this browser and device.</p></div>
+      <section class="card" id="chart-card" hidden>
+        <div class="metrics"><div class="metric"><small>First logged</small><strong id="first-value">—</strong></div><div class="metric"><small>Current</small><strong id="current-value">—</strong></div><div class="metric"><small>Change</small><strong id="change-value">—</strong></div></div>
+        <div class="chart-wrap"><svg id="chart" viewBox="0 0 840 360" role="img" aria-label="Weight progression chart"></svg></div>
+      </section>
+      <section class="card empty" id="empty-state"><div><strong>No weight history yet.</strong>Go back to the plan, enter or change a kg value for an exercise, then return here.</div></section>
+      <p class="note">A point is saved when a kg value changes, so this shows progression in working weight—not every workout where you repeated the same weight.</p>
+    </main>
+    <script>
+      const historyKey = 'build-routine-weight-history';
+      const nameKey = 'build-routine-exercise-names';
+      const history = JSON.parse(localStorage.getItem(historyKey) || '[]').filter(item => item && item.exerciseId && Number.isFinite(item.weight) && item.at);
+      const names = JSON.parse(localStorage.getItem(nameKey) || '{}');
+      const select = document.getElementById('exercise-select');
+      const card = document.getElementById('chart-card');
+      const empty = document.getElementById('empty-state');
+      const dateFormat = new Intl.DateTimeFormat(undefined, { month: 'short', day: 'numeric' });
+      const ids = [...new Set(history.map(item => item.exerciseId))];
+
+      if (!ids.length) {
+        select.disabled = true;
+        select.innerHTML = '<option>Enter weights on the plan page first</option>';
+      } else {
+        ids.forEach(id => {
+          const option = document.createElement('option');
+          option.value = id;
+          option.textContent = names[id] || id;
+          select.append(option);
+        });
+        card.hidden = false;
+        empty.hidden = true;
+        select.addEventListener('change', render);
+        render();
+      }
+
+      function render() {
+        const points = history.filter(item => item.exerciseId === select.value).sort((a, b) => new Date(a.at) - new Date(b.at));
+        const first = points[0];
+        const last = points.at(-1);
+        const change = last.weight - first.weight;
+        document.getElementById('first-value').textContent = `${first.weight} kg`;
+        document.getElementById('current-value').textContent = `${last.weight} kg`;
+        document.getElementById('change-value').textContent = `${change >= 0 ? '+' : ''}${change} kg`;
+
+        const width = 840, height = 360, left = 55, right = 22, top = 26, bottom = 48;
+        const values = points.map(point => point.weight);
+        const minWeight = Math.min(...values), maxWeight = Math.max(...values);
+        const step = maxWeight - minWeight < 10 ? 2.5 : 5;
+        const yMin = Math.max(0, Math.floor(minWeight / step) * step - step);
+        const yMax = Math.ceil(maxWeight / step) * step + step;
+        const startTime = new Date(first.at).getTime();
+        const endTime = new Date(last.at).getTime();
+        const x = point => startTime === endTime ? (left + width - right) / 2 : left + ((new Date(point.at).getTime() - startTime) / (endTime - startTime)) * (width - left - right);
+        const y = value => top + ((yMax - value) / (yMax - yMin)) * (height - top - bottom);
+        const grid = Array.from({ length: 5 }, (_, index) => {
+          const value = yMin + ((yMax - yMin) / 4) * index;
+          const chartY = y(value);
+          return `<line x1="${left}" x2="${width - right}" y1="${chartY}" y2="${chartY}" stroke="#e4e8e2" /><text x="${left - 10}" y="${chartY + 4}" text-anchor="end" fill="#758075" font-size="12">${value} kg</text>`;
+        }).join('');
+        const path = points.map((point, index) => `${index ? 'L' : 'M'} ${x(point).toFixed(1)} ${y(point.weight).toFixed(1)}`).join(' ');
+        const dots = points.map(point => `<circle cx="${x(point)}" cy="${y(point.weight)}" r="5" fill="#365a3e" stroke="#fff" stroke-width="3"><title>${dateFormat.format(new Date(point.at))}: ${point.weight} kg</title></circle>`).join('');
+        const dates = [first, last].map((point, index) => `<text x="${x(point)}" y="${height - 15}" text-anchor="${index ? 'end' : 'start'}" fill="#758075" font-size="12">${dateFormat.format(new Date(point.at))}</text>`).join('');
+        document.getElementById('chart').innerHTML = `${grid}<path d="${path}" fill="none" stroke="#365a3e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />${dots}${dates}`;
+      }
+    </script>
+  </body>
+</html>

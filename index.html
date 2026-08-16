@@ -32,6 +32,8 @@
       .topbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; }
       .brand { font-weight: 800; letter-spacing: .13em; font-size: .78rem; text-transform: uppercase; }
       .pill { border: 1px solid var(--line); border-radius: 999px; padding: 7px 11px; color: var(--mint); font-size: .77rem; font-weight: 700; }
+      .button { display: inline-flex; align-items: center; justify-content: center; padding: 10px 14px; border-radius: 9px; background: var(--lime); color: #172015; text-decoration: none; font-size: .78rem; font-weight: 850; }
+      .button:hover { background: #e1fb87; }
       .hero-grid { display: grid; grid-template-columns: 1.25fr .75fr; gap: 54px; padding: 28px 0 34px; align-items: end; }
       h1 { font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1; letter-spacing: -.06em; margin: 0; max-width: 760px; }
       .accent { color: var(--lime); }
@@ -152,7 +154,7 @@
         </div>
       </div>
     </header>
-    <nav><div class="shell"><a href="#week">Weekly flow</a><a href="#lifting">Lift</a><a href="#starting-loads">Starting loads</a><a href="#conditioning">Condition</a><a href="#progress">Progress</a><a href="#fuel">Fuel & recover</a></div></nav>
+    <nav><div class="shell"><a href="#week">Weekly flow</a><a href="#lifting">Lift</a><a href="#starting-loads">Starting loads</a><a href="#conditioning">Condition</a><a href="#progress">Progress</a><a href="#fuel">Fuel & recover</a><a href="progress.html">Charts ↗</a></div></nav>
     <main class="shell">
       <section id="week">
         <div class="section-head"><div><p class="eyebrow">The weekly rhythm</p><h2>Hard work, deliberately spaced.</h2></div><p class="section-copy">Six workout days, one full recovery day, and no two-a-days. Swings and 4×4 are dedicated HIIT sessions; Zone 2 stays genuinely easy.</p></div>
@@ -214,6 +216,7 @@
           </tbody>
         </table>
         <p class="fine">If you miss the bottom of the rep range, lower the load next time. If all sets reach the top of the range at 1–3 RIR, add 2.5 kg for upper body or 5 kg for lower body. Do not test maxes during this block.</p>
+        <p><a class="button" href="progress.html">Open progress charts →</a></p>
       </section>
       <section id="conditioning">
         <div class="section-head"><div><p class="eyebrow">Keep the engine</p><h2>Condition without stealing gains.</h2></div></div>
@@ -237,6 +240,8 @@
     <script>
       const key = 'build-routine-checks';
       const weightKey = 'build-routine-weights';
+      const historyKey = 'build-routine-weight-history';
+      const nameKey = 'build-routine-exercise-names';
       const stored = JSON.parse(localStorage.getItem(key) || '{}');
       const storedWeights = JSON.parse(localStorage.getItem(weightKey) || '{}');
       document.querySelectorAll('input[type="checkbox"]').forEach(box => {
@@ -255,10 +260,22 @@
         weightField.innerHTML = `<input class="weight-input" id="${box.id}-weight" type="number" inputmode="decimal" min="0" step="0.5" placeholder="kg" /> kg`;
         const weightInput = weightField.querySelector('input');
         weightInput.value = storedWeights[box.id] || '';
+        const names = JSON.parse(localStorage.getItem(nameKey) || '{}');
+        names[box.id] = label.textContent.trim().replace(/\s+/g, ' ');
+        localStorage.setItem(nameKey, JSON.stringify(names));
         weightInput.addEventListener('input', () => {
           const current = JSON.parse(localStorage.getItem(weightKey) || '{}');
           current[box.id] = weightInput.value;
           localStorage.setItem(weightKey, JSON.stringify(current));
+        });
+        weightInput.addEventListener('change', () => {
+          if (!weightInput.value) return;
+          const history = JSON.parse(localStorage.getItem(historyKey) || '[]');
+          const previous = [...history].reverse().find(entry => entry.exerciseId === box.id);
+          const weight = Number(weightInput.value);
+          if (previous && previous.weight === weight) return;
+          history.push({ exerciseId: box.id, weight, at: new Date().toISOString() });
+          localStorage.setItem(historyKey, JSON.stringify(history));
         });
         exercise.append(weightField);
       });
