@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#101913" />
+    <title>Build — Natural Mass Plan</title>
+    <style>
+      :root {
+        --ink: #eff3ec;
+        --muted: #aab5aa;
+        --paper: #f5f4ee;
+        --night: #101913;
+        --panel: #19241c;
+        --line: rgba(239, 243, 236, .14);
+        --lime: #d4f460;
+        --mint: #9de0bd;
+        --orange: #ff9b57;
+        --radius: 22px;
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: var(--paper);
+        color: var(--night);
+        line-height: 1.45;
+      }
+      .hero { background: var(--night); color: var(--ink); overflow: hidden; }
+      .shell { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
+      .topbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; }
+      .brand { font-weight: 800; letter-spacing: .13em; font-size: .78rem; text-transform: uppercase; }
+      .pill { border: 1px solid var(--line); border-radius: 999px; padding: 7px 11px; color: var(--mint); font-size: .77rem; font-weight: 700; }
+      .hero-grid { display: grid; grid-template-columns: 1.25fr .75fr; gap: 54px; padding: 28px 0 34px; align-items: end; }
+      h1 { font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1; letter-spacing: -.06em; margin: 0; max-width: 760px; }
+      .accent { color: var(--lime); }
+      .intro { color: var(--muted); max-width: 470px; font-size: 1.05rem; margin: 26px 0 0; }
+      .hero-metrics { display: grid; gap: 12px; }
+      .metric { border-top: 1px solid var(--line); padding-top: 13px; display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+      .metric strong { color: var(--lime); font-size: 1.5rem; letter-spacing: -.04em; }
+      .metric span { color: var(--muted); text-align: right; font-size: .82rem; }
+      nav { background: #e9e8df; border-bottom: 1px solid #d8d7cf; }
+      nav .shell { display: flex; gap: 24px; overflow-x: auto; }
+      nav a { color: #526154; text-decoration: none; font-size: .83rem; font-weight: 750; padding: 15px 0; white-space: nowrap; }
+      nav a:hover { color: var(--night); }
+      main { padding: 54px 0 80px; }
+      .eyebrow { color: #627163; font-size: .72rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; margin: 0 0 8px; }
+      h2 { margin: 0; font-size: clamp(1.7rem, 3vw, 2.65rem); letter-spacing: -.055em; line-height: 1; }
+      .section-head { display: flex; justify-content: space-between; align-items: end; gap: 20px; margin-bottom: 22px; }
+      .section-copy { max-width: 480px; color: #647065; font-size: .9rem; margin: 0; }
+      section { margin-top: 68px; }
+      .week { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
+      .day { min-height: 178px; border-radius: 17px; padding: 16px; background: #e8e9e3; border: 1px solid #dcddd7; display: flex; flex-direction: column; }
+      .day.lower { background: #e6eedf; }
+      .day.upper { background: #e7eee9; }
+      .day.cardio { background: #f1eadf; }
+      .day.rest { background: #dedfd9; }
+      .weekday { text-transform: uppercase; letter-spacing: .11em; font-size: .68rem; color: #788077; font-weight: 800; }
+      .day h3 { font-size: 1.05rem; letter-spacing: -.035em; margin: 11px 0 6px; line-height: 1.05; }
+      .day p { margin: 0; color: #607061; font-size: .78rem; }
+      .tag { margin-top: auto; padding-top: 12px; font-size: .7rem; color: #516751; font-weight: 800; }
+      .workout-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+      .workout { background: white; border: 1px solid #dedfd8; border-radius: var(--radius); overflow: hidden; box-shadow: 0 8px 25px rgba(24, 39, 26, .04); }
+      .workout-head { padding: 20px 22px 17px; background: var(--night); color: var(--ink); display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+      .workout:nth-child(2) .workout-head { background: #23342a; }
+      .workout:nth-child(3) .workout-head { background: #364326; }
+      .workout:nth-child(4) .workout-head { background: #2e2922; }
+      .workout h3 { margin: 0; font-size: 1.4rem; letter-spacing: -.05em; }
+      .workout-head small { color: var(--mint); display: block; margin-top: 3px; }
+      .time { background: rgba(255,255,255,.12); border-radius: 99px; padding: 5px 8px; font-size: .7rem; font-weight: 800; white-space: nowrap; }
+      .exercise-list { padding: 8px 22px 15px; }
+      .exercise { display: grid; grid-template-columns: 21px 1fr auto; gap: 10px; align-items: center; padding: 13px 0; border-bottom: 1px solid #ecece7; }
+      .exercise:last-child { border-bottom: 0; }
+      input[type="checkbox"] { accent-color: #4b753b; width: 16px; height: 16px; cursor: pointer; }
+      .exercise label { font-size: .9rem; font-weight: 700; cursor: pointer; }
+      .exercise label span { display: block; color: #758075; font-size: .72rem; font-weight: 500; margin-top: 2px; }
+      .sets { color: #506453; font-size: .77rem; font-weight: 800; white-space: nowrap; }
+      .condition-grid { display: grid; grid-template-columns: 1.1fr .9fr .9fr; gap: 16px; }
+      .condition { border-radius: var(--radius); padding: 24px; min-height: 250px; }
+      .condition h3 { font-size: 1.35rem; letter-spacing: -.05em; margin: 6px 0 10px; }
+      .condition p { font-size: .9rem; margin: 0; max-width: 350px; }
+      .hiit { background: var(--orange); color: #3c210e; }
+      .swings { background: var(--mint); color: #173326; }
+      .zone { background: var(--night); color: var(--ink); }
+      .zone p { color: #bfd0c1; }
+      .condition .badge { display: inline-block; padding: 5px 8px; border: 1px solid currentColor; border-radius: 999px; font-size: .68rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; }
+      .split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+      .note { padding: 27px; background: #e6e7df; border-radius: var(--radius); }
+      .note h3 { margin: 0 0 15px; font-size: 1.3rem; letter-spacing: -.045em; }
+      .rules { padding: 0; margin: 0; list-style: none; display: grid; gap: 14px; }
+      .rules li { padding-left: 24px; position: relative; color: #4e5f50; font-size: .89rem; }
+      .rules li::before { content: "→"; position: absolute; left: 0; color: #588337; font-weight: 900; }
+      .fuel { background: var(--night); color: var(--ink); }
+      .fuel .rules li { color: #cad4c7; }
+      .fuel .rules li::before { color: var(--lime); }
+      .fine { color: #708072; font-size: .76rem; margin: 24px 0 0; }
+      .loads { width: 100%; border-collapse: collapse; background: white; border: 1px solid #dedfd8; border-radius: var(--radius); overflow: hidden; }
+      .loads th, .loads td { padding: 14px 18px; text-align: left; border-bottom: 1px solid #e9e9e4; font-size: .88rem; }
+      .loads th { color: #617062; background: #f0f1ed; font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; }
+      .loads tr:last-child td { border-bottom: 0; }
+      footer { background: var(--night); color: #bdc8bc; padding: 28px 0; font-size: .78rem; }
+      footer .shell { display: flex; justify-content: space-between; gap: 20px; }
+      @media (max-width: 900px) {
+        .week { grid-template-columns: repeat(4, 1fr); }
+        .hero-grid { grid-template-columns: 1fr; gap: 35px; }
+        .hero-metrics { grid-template-columns: repeat(3, 1fr); }
+        .metric { display: block; }
+        .metric span { display: block; text-align: left; margin-top: 4px; }
+        .condition-grid { grid-template-columns: 1fr 1fr; }
+        .condition:first-child { grid-column: span 2; }
+      }
+      @media (max-width: 620px) {
+        .shell { width: min(100% - 28px, 1180px); }
+        .topbar { padding: 15px 0; }
+        .hero-grid { padding: 42px 0 48px; }
+        .hero-metrics, .week, .workout-grid, .condition-grid, .split { grid-template-columns: 1fr; }
+        .condition:first-child { grid-column: auto; }
+        .day { min-height: 116px; }
+        .day h3 { margin-top: 8px; }
+        .tag { margin-top: 8px; }
+        .section-head { display: block; }
+        .section-copy { margin-top: 13px; }
+        section { margin-top: 48px; }
+        main { padding-top: 42px; }
+        .workout-head { padding: 18px; }
+        .exercise-list { padding: 6px 18px 12px; }
+        footer .shell { display: block; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="hero">
+      <div class="shell">
+        <div class="topbar"><span class="brand">Build / Natural Mass</span><span class="pill">45-minute lifting cap</span></div>
+        <div class="hero-grid">
+          <div>
+            <p class="eyebrow" style="color: var(--mint)">12-week starting block</p>
+            <h1>Natural hypertrophy plan</h1>
+            <p class="intro">Three full-body lifting sessions, two HIIT sessions, one Zone 2 session, and one rest day.</p>
+          </div>
+          <div class="hero-metrics">
+            <div class="metric"><strong>3×</strong><span>full-body lifting<br />sessions each week</span></div>
+            <div class="metric"><strong>2×</strong><span>HIIT sessions<br />each week</span></div>
+            <div class="metric"><strong>1–3</strong><span>reps in reserve<br />on most sets</span></div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <nav><div class="shell"><a href="#week">Weekly flow</a><a href="#lifting">Lift</a><a href="#starting-loads">Starting loads</a><a href="#conditioning">Condition</a><a href="#progress">Progress</a><a href="#fuel">Fuel & recover</a></div></nav>
+    <main class="shell">
+      <section id="week">
+        <div class="section-head"><div><p class="eyebrow">The weekly rhythm</p><h2>Hard work, deliberately spaced.</h2></div><p class="section-copy">Six workout days, one full recovery day, and no two-a-days. Swings and 4×4 are dedicated HIIT sessions; Zone 2 stays genuinely easy.</p></div>
+        <div class="week">
+          <article class="day lower"><span class="weekday">Mon</span><h3>Full Body A</h3><p>Squat · press · row</p><span class="tag">40–45 min</span></article>
+          <article class="day cardio"><span class="weekday">Tue</span><h3>KB-swing HIIT</h3><p>Dedicated interval session</p><span class="tag">15–20 min</span></article>
+          <article class="day upper"><span class="weekday">Wed</span><h3>Full Body B</h3><p>Leg press · press · pull</p><span class="tag">40–45 min</span></article>
+          <article class="day cardio"><span class="weekday">Thu</span><h3>Zone 2</h3><p>Easy, conversational</p><span class="tag">30–45 min</span></article>
+          <article class="day lower"><span class="weekday">Fri</span><h3>Full Body C</h3><p>Squat · press · row</p><span class="tag">40–45 min</span></article>
+          <article class="day cardio"><span class="weekday">Sat</span><h3>Norwegian 4×4</h3><p>Bike / rower preferred</p><span class="tag">~45 min total</span></article>
+          <article class="day rest"><span class="weekday">Sun</span><h3>Recover</h3><p>Rest or easy walk</p><span class="tag">Keep it easy</span></article>
+        </div>
+      </section>
+      <section id="lifting">
+        <div class="section-head"><div><p class="eyebrow">Lifting sessions</p><h2>Full-body training.</h2></div><p class="section-copy">Check off sets as you go. Your session state is saved locally in this browser. Alternate paired exercises rather than rushing your rest.</p></div>
+        <div class="workout-grid">
+          <article class="workout"><div class="workout-head"><div><h3>Full Body A</h3><small>Squat, press, row, hinge</small></div><span class="time">40–45 min</span></div><div class="exercise-list">
+            <div class="exercise"><input id="la1" type="checkbox"><label for="la1">High-bar back squat <span>or hack squat</span></label><b class="sets">3 × 5–8</b></div>
+            <div class="exercise"><input id="la2" type="checkbox"><label for="la2">A1. Bench press <span>barbell or dumbbell</span></label><b class="sets">3 × 5–8</b></div>
+            <div class="exercise"><input id="la3" type="checkbox"><label for="la3">A2. Chest-supported row</label><b class="sets">3 × 6–10</b></div>
+            <div class="exercise"><input id="la4" type="checkbox"><label for="la4">Romanian deadlift</label><b class="sets">2 × 6–10</b></div>
+            <div class="exercise"><input id="la5" type="checkbox"><label for="la5">Seated or lying leg curl</label><b class="sets">2 × 8–15</b></div>
+            <div class="exercise"><input id="la6" type="checkbox"><label for="la6">Standing calf raise</label><b class="sets">2 × 8–15</b></div>
+          </div></article>
+          <article class="workout"><div class="workout-head"><div><h3>Full Body B</h3><small>Leg press, overhead press, pull</small></div><span class="time">40–45 min</span></div><div class="exercise-list">
+            <div class="exercise"><input id="fb1" type="checkbox"><label for="fb1">Leg press</label><b class="sets">3 × 8–15</b></div>
+            <div class="exercise"><input id="fb2" type="checkbox"><label for="fb2">A1. Seated dumbbell overhead press</label><b class="sets">3 × 6–10</b></div>
+            <div class="exercise"><input id="fb3" type="checkbox"><label for="fb3">A2. Neutral-grip pull-up / pulldown</label><b class="sets">3 × 6–10</b></div>
+            <div class="exercise"><input id="fb4" type="checkbox"><label for="fb4">Romanian deadlift</label><b class="sets">2 × 6–10</b></div>
+            <div class="exercise"><input id="fb5" type="checkbox"><label for="fb5">Machine chest press / weighted dip</label><b class="sets">2 × 8–12</b></div>
+            <div class="exercise"><input id="fb6" type="checkbox"><label for="fb6">Cable lateral raise</label><b class="sets">2 × 12–20</b></div>
+          </div></article>
+          <article class="workout"><div class="workout-head"><div><h3>Full Body C</h3><small>Squat, incline press, row, arms</small></div><span class="time">40–45 min</span></div><div class="exercise-list">
+            <div class="exercise"><input id="lb1" type="checkbox"><label for="lb1">Front squat <span>or hack squat</span></label><b class="sets">3 × 6–10</b></div>
+            <div class="exercise"><input id="lb2" type="checkbox"><label for="lb2">A1. Incline dumbbell press</label><b class="sets">3 × 8–12</b></div>
+            <div class="exercise"><input id="lb3" type="checkbox"><label for="lb3">A2. Seated cable row</label><b class="sets">3 × 8–12</b></div>
+            <div class="exercise"><input id="lb4" type="checkbox"><label for="lb4">Barbell hip thrust</label><b class="sets">2 × 6–10</b></div>
+            <div class="exercise"><input id="lb5" type="checkbox"><label for="lb5">Seated or lying leg curl</label><b class="sets">2 × 8–15</b></div>
+            <div class="exercise"><input id="lb6" type="checkbox"><label for="lb6">B1. Incline dumbbell curl</label><b class="sets">2 × 10–15</b></div>
+            <div class="exercise"><input id="lb7" type="checkbox"><label for="lb7">B2. Cable triceps press-down</label><b class="sets">2 × 10–15</b></div>
+          </div></article>
+        </div>
+      </section>
+      <section id="starting-loads">
+        <div class="section-head"><div><p class="eyebrow">Week 1 calibration</p><h2>Starting loads.</h2></div><p class="section-copy">These are conservative first working-set estimates. Begin with about 3 RIR; the technique and rep target decide the load, not ego.</p></div>
+        <table class="loads">
+          <thead><tr><th>Exercise</th><th>Starting working weight</th></tr></thead>
+          <tbody>
+            <tr><td>Back squat</td><td>40–50 kg</td></tr>
+            <tr><td>Romanian deadlift</td><td>50–60 kg; begin 50 kg for 2 × 8</td></tr>
+            <tr><td>Barbell bench press</td><td>35–45 kg</td></tr>
+            <tr><td>Chest-supported dumbbell row</td><td>12.5–20 kg per hand</td></tr>
+            <tr><td>Leg press</td><td>Machine-dependent; choose 10 controlled reps at 3 RIR</td></tr>
+            <tr><td>Seated dumbbell overhead press</td><td>10–15 kg per hand</td></tr>
+            <tr><td>Lat pulldown</td><td>45–60 kg, then adjust for the machine</td></tr>
+            <tr><td>Barbell hip thrust</td><td>50–70 kg</td></tr>
+            <tr><td>Cable lateral raise</td><td>2.5–5 kg</td></tr>
+            <tr><td>Curls / triceps press-down</td><td>10–20 kg on the stack</td></tr>
+          </tbody>
+        </table>
+        <p class="fine">If you miss the bottom of the rep range, lower the load next time. If all sets reach the top of the range at 1–3 RIR, add 2.5 kg for upper body or 5 kg for lower body. Do not test maxes during this block.</p>
+      </section>
+      <section id="conditioning">
+        <div class="section-head"><div><p class="eyebrow">Keep the engine</p><h2>Condition without stealing gains.</h2></div></div>
+        <div class="condition-grid">
+          <article class="condition hiit"><span class="badge">HIIT / Saturday</span><h3>Norwegian 4×4</h3><p>Warm up 8–10 min. Do 4 × 4 min at roughly 90–95% peak heart rate, separated by 3 min easy active recovery. Cool down 5–10 min.</p></article>
+          <article class="condition swings"><span class="badge">HIIT / Tuesday</span><h3>Kettlebell swings.</h3><p>Start with 8 rounds of 20 sec crisp hard-style swings / 40 sec recovery. Build to 10 rounds only while every rep stays explosive.</p></article>
+          <article class="condition zone"><span class="badge">Zone 2 / Thursday</span><h3>Easy by design.</h3><p>30–45 min at a pace where you can speak in sentences. Bike, incline walk, elliptical, or easy rower all work.</p></article>
+        </div>
+      </section>
+      <section id="progress" class="split">
+        <article class="note"><p class="eyebrow">Progression</p><h3>Increase load systematically.</h3><ul class="rules"><li>Use 1–3 RIR on nearly all working sets; stop before form changes.</li><li>Reach the top of every rep range at the intended RIR, then make the smallest load jump.</li><li>Keep exercise choices stable for 8–12 weeks. Log load, reps, RIR, and pain.</li><li>If a session runs long, cut the final C pair—not compound rest.</li></ul></article>
+        <article class="note"><p class="eyebrow">When to adjust</p><h3>Measure. Then change one thing.</h3><ul class="rules"><li>Keep the starting volume for four weeks if performance and recovery are good.</li><li>For a true stall, add one set to a relevant early exercise—only one muscle at a time.</li><li>Two poor exposures in a row: remove 2–4 weekly sets or reduce cardio stress first.</li><li>A lower-volume week is for accumulating fatigue, not a calendar ritual.</li></ul></article>
+      </section>
+      <section id="fuel" class="split">
+        <article class="note fuel"><p class="eyebrow" style="color: var(--mint)">Nutrition</p><h3>Daily targets.</h3><ul class="rules"><li><strong>Protein:</strong> 1.6–2.2 g per kg body mass per day, across 3–5 meals.</li><li><strong>Calories:</strong> start around 5–10% above maintenance; target 0.25–0.5% body-mass gain per week.</li><li><strong>Creatine:</strong> 3–5 g creatine monohydrate daily. Timing does not matter.</li></ul></article>
+        <article class="note"><p class="eyebrow">Recovery</p><h3>Sleep and tracking.</h3><ul class="rules"><li>Aim for 7–9 hours nightly and a consistent wake time.</li><li>Track seven-day average morning weight, weekly waist, and monthly photos.</li><li>Prioritize sleep when deciding whether to add training volume.</li></ul></article>
+      </section>
+      <p class="fine">This plan is for a healthy adult and is not medical clearance. Stop and seek assessment for chest pain, fainting, unusual shortness of breath, or persistent joint pain.</p>
+    </main>
+    <footer><div class="shell"><span>NATURAL HYPERTROPHY PLAN</span><span>3 lifting · 2 HIIT · 1 Zone 2</span></div></footer>
+    <script>
+      const key = 'build-routine-checks';
+      const stored = JSON.parse(localStorage.getItem(key) || '{}');
+      document.querySelectorAll('input[type="checkbox"]').forEach(box => {
+        box.checked = Boolean(stored[box.id]);
+        box.addEventListener('change', () => {
+          const current = JSON.parse(localStorage.getItem(key) || '{}');
+          current[box.id] = box.checked;
+          localStorage.setItem(key, JSON.stringify(current));
+        });
+      });
+    </script>
+  </body>
+</html>
