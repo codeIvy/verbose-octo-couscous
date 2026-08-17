@@ -68,7 +68,7 @@
       .next-workout p:not(.eyebrow) { max-width: 680px; margin: 8px 0 0; color: #c4d0c3; font-size: .9rem; }
       .next-action { flex: 0 0 auto; }
       .workout-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-      .workout { background: white; border: 1px solid #dedfd8; border-radius: var(--radius); overflow: hidden; box-shadow: 0 8px 25px rgba(24, 39, 26, .04); }
+      .workout { background: white; border: 1px solid #dedfd8; border-radius: var(--radius); overflow: hidden; box-shadow: 0 8px 25px rgba(24, 39, 26, .04); scroll-margin-top: 20px; }
       .workout.active { border-color: #638c70; box-shadow: 0 0 0 3px #dcebd6, 0 8px 25px rgba(24, 39, 26, .08); }
       .workout-head { padding: 20px 22px 17px; background: var(--night); color: var(--ink); display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
       .workout:nth-child(2) .workout-head { background: #23342a; }
@@ -98,7 +98,7 @@
       .weight-input:focus { outline: 2px solid #9de0bd; outline-offset: 1px; border-color: #638c70; }
       .round input:disabled { cursor: not-allowed; opacity: .65; }
       .condition-grid { display: grid; grid-template-columns: 1.1fr .9fr .9fr; gap: 16px; }
-      .condition { border-radius: var(--radius); padding: 24px; min-height: 250px; }
+      .condition { border-radius: var(--radius); padding: 24px; min-height: 250px; scroll-margin-top: 20px; }
       .condition.active { box-shadow: 0 0 0 3px #dcebd6; }
       .condition h3 { font-size: 1.35rem; letter-spacing: -.05em; margin: 6px 0 10px; }
       .condition p { font-size: .9rem; margin: 0; max-width: 350px; }
@@ -174,20 +174,8 @@
         </div>
       </div>
     </header>
-    <nav><div class="shell"><a href="#week">Weekly flow</a><a href="#lifting">Lift</a><a href="#starting-loads">Starting loads</a><a href="#conditioning">Condition</a><a href="#progress">Progress</a><a href="#fuel">Fuel & recover</a><a href="progress.html">Charts ↗</a></div></nav>
+    <nav><div class="shell"><a href="#next-workout">Train now</a><a href="#lifting">Lift</a><a href="#conditioning">Condition</a><a href="#starting-loads">Starting loads</a><a href="#progress">Progress</a><a href="#fuel">Fuel & recover</a><a href="#week">Weekly flow</a><a href="progress.html">Charts ↗</a></div></nav>
     <main class="shell">
-      <section id="week">
-        <div class="section-head"><div><p class="eyebrow">The weekly rhythm</p><h2>Hard work, deliberately spaced.</h2></div><p class="section-copy">Six workout days, one full recovery day, and no two-a-days. Swings and 4×4 are dedicated HIIT sessions; Zone 2 stays genuinely easy.</p></div>
-        <div class="week">
-          <article class="day lower"><span class="weekday">Mon</span><h3>Full Body A</h3><p>Squat · press · row</p><span class="tag">40–45 min</span></article>
-          <article class="day cardio"><span class="weekday">Tue</span><h3>KB-swing HIIT</h3><p>Dedicated interval session</p><span class="tag">15–20 min</span></article>
-          <article class="day upper"><span class="weekday">Wed</span><h3>Full Body B</h3><p>Leg press · press · pull</p><span class="tag">40–45 min</span></article>
-          <article class="day cardio"><span class="weekday">Thu</span><h3>Zone 2</h3><p>Easy, conversational</p><span class="tag">30–45 min</span></article>
-          <article class="day lower"><span class="weekday">Fri</span><h3>Full Body C</h3><p>Squat · press · row</p><span class="tag">40–45 min</span></article>
-          <article class="day cardio"><span class="weekday">Sat</span><h3>Norwegian 4×4</h3><p>Bike / rower preferred</p><span class="tag">~45 min total</span></article>
-          <article class="day rest"><span class="weekday">Sun</span><h3>Recover</h3><p>Rest or easy walk</p><span class="tag">Keep it easy</span></article>
-        </div>
-      </section>
       <section class="next-workout" id="next-workout" aria-live="polite"></section>
       <section id="lifting">
         <div class="section-head"><div><p class="eyebrow">Lifting sessions</p><h2>Full-body training.</h2></div><p class="section-copy">Each exercise has three rounds. Check them off as you go; the next unfinished round is highlighted and session state is saved locally in this browser.</p></div>
@@ -219,6 +207,14 @@
           </div></article>
         </div>
       </section>
+      <section id="conditioning">
+        <div class="section-head"><div><p class="eyebrow">Keep the engine</p><h2>Condition without stealing gains.</h2></div></div>
+        <div class="condition-grid">
+          <article class="condition hiit" id="card-four-four" data-card-id="four-four"><span class="badge">HIIT / Saturday</span><h3>Norwegian 4×4</h3><p>Warm up 8–10 min. Do 4 × 4 min at roughly 90–95% peak heart rate, separated by 3 min easy active recovery. Cool down 5–10 min.</p></article>
+          <article class="condition swings" id="card-swings" data-card-id="swings"><span class="badge">HIIT / Tuesday</span><h3>Kettlebell swings.</h3><p>Start with 8 rounds of 20 sec crisp hard-style swings / 40 sec recovery. Build to 10 rounds only while every rep stays explosive.</p></article>
+          <article class="condition zone" id="card-zone" data-card-id="zone"><span class="badge">Zone 2 / Thursday</span><h3>Easy by design.</h3><p>30–45 min at a pace where you can speak in sentences. Bike, incline walk, elliptical, or easy rower all work.</p></article>
+        </div>
+      </section>
       <section id="starting-loads">
         <div class="section-head"><div><p class="eyebrow">Week 1 calibration</p><h2>Starting loads.</h2></div><p class="section-copy">These are conservative first working-set estimates. Begin with about 3 RIR; the technique and rep target decide the load, not ego.</p></div>
         <table class="loads">
@@ -239,14 +235,6 @@
         <p class="fine">If you miss the bottom of the rep range, lower the load next time. If all sets reach the top of the range at 1–3 RIR, add 2.5 kg for upper body or 5 kg for lower body. Do not test maxes during this block.</p>
         <p><a class="button" href="progress.html">Open progress charts →</a></p>
       </section>
-      <section id="conditioning">
-        <div class="section-head"><div><p class="eyebrow">Keep the engine</p><h2>Condition without stealing gains.</h2></div></div>
-        <div class="condition-grid">
-          <article class="condition hiit" id="card-four-four" data-card-id="four-four"><span class="badge">HIIT / Saturday</span><h3>Norwegian 4×4</h3><p>Warm up 8–10 min. Do 4 × 4 min at roughly 90–95% peak heart rate, separated by 3 min easy active recovery. Cool down 5–10 min.</p></article>
-          <article class="condition swings" id="card-swings" data-card-id="swings"><span class="badge">HIIT / Tuesday</span><h3>Kettlebell swings.</h3><p>Start with 8 rounds of 20 sec crisp hard-style swings / 40 sec recovery. Build to 10 rounds only while every rep stays explosive.</p></article>
-          <article class="condition zone" id="card-zone" data-card-id="zone"><span class="badge">Zone 2 / Thursday</span><h3>Easy by design.</h3><p>30–45 min at a pace where you can speak in sentences. Bike, incline walk, elliptical, or easy rower all work.</p></article>
-        </div>
-      </section>
       <section id="progress" class="split">
         <article class="note"><p class="eyebrow">Progression</p><h3>Increase load systematically.</h3><ul class="rules"><li>Use 1–3 RIR on nearly all working sets; stop before form changes.</li><li>Reach the top of every rep range at the intended RIR, then make the smallest load jump.</li><li>Keep exercise choices stable for 8–12 weeks. Log load, reps, RIR, and pain.</li><li>If a session runs long, cut the final C pair—not compound rest.</li></ul></article>
         <article class="note"><p class="eyebrow">When to adjust</p><h3>Measure. Then change one thing.</h3><ul class="rules"><li>Keep the starting volume for four weeks if performance and recovery are good.</li><li>For a true stall, add one set to a relevant early exercise—only one muscle at a time.</li><li>Two poor exposures in a row: remove 2–4 weekly sets or reduce cardio stress first.</li><li>A lower-volume week is for accumulating fatigue, not a calendar ritual.</li></ul></article>
@@ -254,6 +242,18 @@
       <section id="fuel" class="split">
         <article class="note fuel"><p class="eyebrow" style="color: var(--mint)">Nutrition</p><h3>Daily targets.</h3><ul class="rules"><li><strong>Protein:</strong> 1.6–2.2 g per kg body mass per day, across 3–5 meals.</li><li><strong>Calories:</strong> start around 5–10% above maintenance; target 0.25–0.5% body-mass gain per week.</li><li><strong>Creatine:</strong> 3–5 g creatine monohydrate daily. Timing does not matter.</li></ul></article>
         <article class="note"><p class="eyebrow">Recovery</p><h3>Sleep and tracking.</h3><ul class="rules"><li>Aim for 7–9 hours nightly and a consistent wake time.</li><li>Track seven-day average morning weight, weekly waist, and monthly photos.</li><li>Prioritize sleep when deciding whether to add training volume.</li></ul></article>
+      </section>
+      <section id="week">
+        <div class="section-head"><div><p class="eyebrow">The weekly rhythm</p><h2>Hard work, deliberately spaced.</h2></div><p class="section-copy">Six workout days, one full recovery day, and no two-a-days. Swings and 4×4 are dedicated HIIT sessions; Zone 2 stays genuinely easy.</p></div>
+        <div class="week">
+          <article class="day lower"><span class="weekday">Mon</span><h3>Full Body A</h3><p>Squat · press · row</p><span class="tag">40–45 min</span></article>
+          <article class="day cardio"><span class="weekday">Tue</span><h3>KB-swing HIIT</h3><p>Dedicated interval session</p><span class="tag">15–20 min</span></article>
+          <article class="day upper"><span class="weekday">Wed</span><h3>Full Body B</h3><p>Leg press · press · pull</p><span class="tag">40–45 min</span></article>
+          <article class="day cardio"><span class="weekday">Thu</span><h3>Zone 2</h3><p>Easy, conversational</p><span class="tag">30–45 min</span></article>
+          <article class="day lower"><span class="weekday">Fri</span><h3>Full Body C</h3><p>Squat · press · row</p><span class="tag">40–45 min</span></article>
+          <article class="day cardio"><span class="weekday">Sat</span><h3>Norwegian 4×4</h3><p>Bike / rower preferred</p><span class="tag">~45 min total</span></article>
+          <article class="day rest"><span class="weekday">Sun</span><h3>Recover</h3><p>Rest or easy walk</p><span class="tag">Keep it easy</span></article>
+        </div>
       </section>
       <p class="fine">This plan is for a healthy adult and is not medical clearance. Stop and seek assessment for chest pain, fainting, unusual shortness of breath, or persistent joint pain.</p>
     </main>
@@ -455,6 +455,8 @@
         document.querySelectorAll('.workout').forEach(workout => workout.classList.toggle('active', workout.dataset.workoutId === active?.cardId));
       };
       renderPanel(false);
+      const selectedCard = document.querySelector(window.location.hash);
+      if (selectedCard) requestAnimationFrame(() => selectedCard.scrollIntoView({ block: 'start' }));
     </script>
   </body>
 </html>
