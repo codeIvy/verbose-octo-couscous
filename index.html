@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#282828" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="icons/workout.svg" type="image/svg+xml" />
     <title>Build — Natural Mass Plan</title>
     <style>
       :root {
@@ -223,6 +225,9 @@
       <p class="fine">This plan is for a healthy adult and is not medical clearance. Stop and seek assessment for chest pain, fainting, unusual shortness of breath, or persistent joint pain.</p>
     </main>
     <footer><div class="shell"><span>NATURAL HYPERTROPHY PLAN</span><span>3 lifting · 2 HIIT · 1 Zone 2</span></div></footer>
+    <script>
+      if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('./service-worker.js'));
+    </script>
     <script>
       const weightKey = 'build-routine-weights';
       const historyKey = 'build-routine-weight-history';

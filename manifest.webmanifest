@@ -1,0 +1,18 @@
+{
+  "name": "Build Routine",
+  "short_name": "Build",
+  "description": "A focused workout routine with local progress tracking.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#282828",
+  "theme_color": "#282828",
+  "icons": [
+    {
+      "src": "icons/workout.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

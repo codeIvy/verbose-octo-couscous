@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#101913" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="icons/workout.svg" type="image/svg+xml" />
     <title>Progress charts — Natural Hypertrophy Plan</title>
     <style>
       :root { --ink: #eff3ec; --night: #101913; --paper: #f5f4ee; --line: #dcded7; --muted: #687568; --lime: #d4f460; --mint: #9de0bd; }
@@ -52,6 +54,9 @@
       <section class="card empty" id="empty-state"><div><strong>No weight history yet.</strong>Go back to the plan, enter or change a kg value for an exercise, then return here.</div></section>
       <p class="note">A point is saved when a kg value changes, so this shows progression in working weight—not every workout where you repeated the same weight.</p>
     </main>
+    <script>
+      if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('./service-worker.js'));
+    </script>
     <script>
       const historyKey = 'build-routine-weight-history';
       const nameKey = 'build-routine-exercise-names';
