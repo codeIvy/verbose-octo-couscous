@@ -99,6 +99,8 @@
       .condition .badge { display: inline-block; padding: 5px 8px; border: 1px solid currentColor; border-radius: 999px; font-size: .68rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; }
       .secondary-button { min-height: 44px; margin: 8px 0 0 8px; padding: 9px 13px; border: 2px solid #665c54; border-radius: 9px; background: transparent; color: var(--ink); font: inherit; font-size: .9rem; font-weight: 800; cursor: pointer; }
       .secondary-button:hover { background: #504945; }
+      .exercise-actions { display: flex; gap: 8px; margin-top: 10px; }
+      .exercise-actions .secondary-button, .exercise-actions .button { margin: 0; }
       .split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
       .note { padding: 27px; background: var(--panel); border-radius: var(--radius); }
       .note h3 { margin: 0 0 15px; font-size: 1.3rem; letter-spacing: -.045em; }
@@ -152,25 +154,24 @@
             <div class="exercise"><input id="la2" type="checkbox"><label for="la2">A1. Bench press <span>barbell or dumbbell</span></label><b class="sets">3 × 5–8</b></div>
             <div class="exercise"><input id="la3" type="checkbox"><label for="la3">A2. Chest-supported row</label><b class="sets">3 × 6–10</b></div>
             <div class="exercise"><input id="la4" type="checkbox"><label for="la4">Romanian deadlift</label><b class="sets">2 × 6–10</b></div>
-            <div class="exercise"><input id="la5" type="checkbox"><label for="la5">Seated or lying leg curl</label><b class="sets">2 × 8–15</b></div>
-            <div class="exercise"><input id="la6" type="checkbox"><label for="la6">Standing calf raise</label><b class="sets">2 × 8–15</b></div>
+            <div class="exercise"><input id="la5" type="checkbox"><label for="la5">KB lateral raise</label><b class="sets">3 × 12–20</b></div>
+            <div class="exercise"><input id="la6" type="checkbox"><label for="la6">Standing calf raise</label><b class="sets">3 × 10–15</b></div>
           </div></article>
-          <article class="workout" id="workout-b" data-workout-id="b"><div class="workout-head"><div><h3>Full Body B</h3><small>Leg press, overhead press, pull</small></div><span class="time">40–45 min</span></div><div class="exercise-list">
+          <article class="workout" id="workout-b" data-workout-id="b"><div class="workout-head"><div><h3>Full Body B</h3><small>Leg press, overhead press, KB swing, arms</small></div><span class="time">40–45 min</span></div><div class="exercise-list">
             <div class="exercise"><input id="fb1" type="checkbox"><label for="fb1">Leg press</label><b class="sets">3 × 8–15</b></div>
             <div class="exercise"><input id="fb2" type="checkbox"><label for="fb2">A1. Seated dumbbell overhead press</label><b class="sets">3 × 6–10</b></div>
             <div class="exercise"><input id="fb3" type="checkbox"><label for="fb3">A2. Neutral-grip pull-up / pulldown</label><b class="sets">3 × 6–10</b></div>
-            <div class="exercise"><input id="fb4" type="checkbox"><label for="fb4">Romanian deadlift</label><b class="sets">2 × 6–10</b></div>
-            <div class="exercise"><input id="fb5" type="checkbox"><label for="fb5">Machine chest press / weighted dip</label><b class="sets">2 × 8–12</b></div>
-            <div class="exercise"><input id="fb6" type="checkbox"><label for="fb6">Cable lateral raise</label><b class="sets">2 × 12–20</b></div>
+            <div class="exercise"><input id="fb4" type="checkbox"><label for="fb4">Heavy kettlebell swing <span>loaded, not timed</span></label><b class="sets">3 × 8–12</b></div>
+            <div class="exercise"><input id="fb5" type="checkbox"><label for="fb5">B1. Incline dumbbell curl</label><b class="sets">2–3 × 10–15</b></div>
+            <div class="exercise"><input id="fb6" type="checkbox"><label for="fb6">B2. Cable triceps press-down</label><b class="sets">2–3 × 10–15</b></div>
           </div></article>
-          <article class="workout" id="workout-c" data-workout-id="c"><div class="workout-head"><div><h3>Full Body C</h3><small>Squat, incline press, row, arms</small></div><span class="time">40–45 min</span></div><div class="exercise-list">
+          <article class="workout" id="workout-c" data-workout-id="c"><div class="workout-head"><div><h3>Full Body C</h3><small>Squat, incline press, row, delts</small></div><span class="time">40–45 min</span></div><div class="exercise-list">
             <div class="exercise"><input id="lb1" type="checkbox"><label for="lb1">Front squat <span>or hack squat</span></label><b class="sets">3 × 6–10</b></div>
             <div class="exercise"><input id="lb2" type="checkbox"><label for="lb2">A1. Incline dumbbell press</label><b class="sets">3 × 8–12</b></div>
             <div class="exercise"><input id="lb3" type="checkbox"><label for="lb3">A2. Seated cable row</label><b class="sets">3 × 8–12</b></div>
             <div class="exercise"><input id="lb4" type="checkbox"><label for="lb4">Barbell hip thrust</label><b class="sets">2 × 6–10</b></div>
-            <div class="exercise"><input id="lb5" type="checkbox"><label for="lb5">Seated or lying leg curl</label><b class="sets">2 × 8–15</b></div>
-            <div class="exercise"><input id="lb6" type="checkbox"><label for="lb6">B1. Incline dumbbell curl</label><b class="sets">2 × 10–15</b></div>
-            <div class="exercise"><input id="lb7" type="checkbox"><label for="lb7">B2. Cable triceps press-down</label><b class="sets">2 × 10–15</b></div>
+            <div class="exercise"><input id="lb5" type="checkbox"><label for="lb5">KB lateral raise</label><b class="sets">3 × 12–20</b></div>
+            <div class="exercise"><input id="lb6" type="checkbox"><label for="lb6">Calf raise</label><b class="sets">3 × 10–15</b></div>
           </div></article>
         </div>
       </section>
@@ -195,7 +196,8 @@
             <tr><td>Seated dumbbell overhead press</td><td>10–15 kg per hand</td></tr>
             <tr><td>Lat pulldown</td><td>45–60 kg, then adjust for the machine</td></tr>
             <tr><td>Barbell hip thrust</td><td>50–70 kg</td></tr>
-            <tr><td>Cable lateral raise</td><td>2.5–5 kg</td></tr>
+            <tr><td>KB lateral raise</td><td>2–4 kg per hand; kettlebells jump in ~4 kg steps, so round down</td></tr>
+            <tr><td>Heavy kettlebell swing</td><td>16–20 kg bell; add reps before jumping bells</td></tr>
             <tr><td>Curls / triceps press-down</td><td>10–20 kg on the stack</td></tr>
           </tbody>
         </table>
@@ -245,7 +247,7 @@
       ];
       const cardById = Object.fromEntries(cards.map(card => [card.id, card]));
       const dailyCard = { 1: 'a', 2: 'swings', 3: 'b', 4: 'zone', 5: 'c', 6: 'four-four' };
-      const equivalents = { la4: ['fb4'], fb4: ['la4'], la5: ['lb5'], lb5: ['la5'] };
+      const equivalents = { la5: ['lb5'], lb5: ['la5'] };
       const workoutExercises = { a: [], b: [], c: [] };
       const blankCycle = number => ({ number, startedAt: new Date().toISOString(), completed: {}, active: null });
       const readJson = (key, fallback) => {
@@ -322,9 +324,10 @@
             round.classList.toggle('current', box === currentBox);
             round.querySelector('.round-status').textContent = box.checked ? 'Done' : box === currentBox ? 'Current' : '';
           });
+          actions.hidden = !(active && boxes.length > 0 && boxes.every(box => box.checked));
         };
 
-        for (let roundNumber = 1; roundNumber <= 3; roundNumber += 1) {
+        const buildRound = roundNumber => {
           const roundId = `${exerciseId}-round-${roundNumber}`;
           const weightId = `${roundId}-weight`;
           const round = document.createElement('div');
@@ -349,8 +352,35 @@
             saveState();
           });
           weightInput.addEventListener('change', () => recordWeight(exerciseId, weightInput.value));
-          rounds.append(round);
-        }
+          return round;
+        };
+        const actions = document.createElement('div');
+        actions.className = 'exercise-actions';
+        const addSetButton = document.createElement('button');
+        addSetButton.type = 'button';
+        addSetButton.className = 'secondary-button';
+        addSetButton.textContent = '+ Add set';
+        addSetButton.addEventListener('click', () => {
+          if (!state.current.active) return;
+          const extraRounds = state.current.active.extraRounds || (state.current.active.extraRounds = {});
+          extraRounds[exerciseId] = (extraRounds[exerciseId] || 0) + 1;
+          const newRoundNumber = 3 + extraRounds[exerciseId];
+          const weights = state.current.active.weights[exerciseId];
+          weights[newRoundNumber - 1] = weights[newRoundNumber - 2] || '';
+          saveState();
+          rounds.append(buildRound(newRoundNumber));
+          updateRoundStates();
+        });
+        const doneButton = document.createElement('button');
+        doneButton.type = 'button';
+        doneButton.className = 'button';
+        doneButton.textContent = 'Set done';
+        doneButton.addEventListener('click', () => exercise.nextElementSibling?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+        actions.append(addSetButton, doneButton);
+
+        const roundCount = 3 + (active?.extraRounds?.[exerciseId] || 0);
+        for (let roundNumber = 1; roundNumber <= roundCount; roundNumber += 1) rounds.append(buildRound(roundNumber));
+        exercise.append(actions);
         updateRoundStates();
       });
 
