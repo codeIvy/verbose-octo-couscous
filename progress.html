@@ -15,7 +15,7 @@
       header { background: var(--night); color: var(--ink); padding: 22px 0 28px; }
       .top { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
       .brand { font-size: .78rem; font-weight: 850; letter-spacing: .12em; text-transform: uppercase; }
-      .back { color: var(--night); background: var(--lime); padding: 9px 12px; border-radius: 8px; text-decoration: none; font-size: .78rem; font-weight: 850; }
+      .back { border: 0; cursor: pointer; font: inherit; color: var(--night); background: var(--lime); padding: 9px 12px; border-radius: 8px; text-decoration: none; font-size: .78rem; font-weight: 850; }
       h1 { margin: 34px 0 7px; font-size: clamp(2rem, 5vw, 3.4rem); letter-spacing: -.065em; line-height: 1; }
       .intro { margin: 0; max-width: 650px; color: #b8c6b9; }
       main { padding: 44px 0 70px; }
@@ -46,7 +46,7 @@
       </div>
     </header>
     <main class="shell">
-      <div class="controls"><label for="exercise-select">Exercise<select id="exercise-select"></select></label><p class="notice">Stored only in this browser and device.</p></div>
+      <div class="controls"><label for="exercise-select">Exercise<select id="exercise-select"></select></label><p class="notice">Stored only in this browser and device. <button id="export-btn" type="button" class="back">Export data</button> <button id="import-btn" type="button" class="back">Import data</button><input id="import-file" type="file" accept="application/json" hidden></p></div>
       <section class="card" id="chart-card" hidden>
         <div class="metrics"><div class="metric"><small>First logged</small><strong id="first-value">—</strong></div><div class="metric"><small>Current</small><strong id="current-value">—</strong></div><div class="metric"><small>Change</small><strong id="change-value">—</strong></div></div>
         <div class="chart-wrap"><svg id="chart" viewBox="0 0 840 360" role="img" aria-label="Weight progression chart"></svg></div>
@@ -60,8 +60,35 @@
     <script>
       const historyKey = 'build-routine-weight-history';
       const nameKey = 'build-routine-exercise-names';
+      const dataKeys = [historyKey, nameKey, 'build-routine-weights', 'build-routine-cycles-v1', 'build-routine-sessions-v1'];
       const history = JSON.parse(localStorage.getItem(historyKey) || '[]').filter(item => item && item.exerciseId && Number.isFinite(item.weight) && item.at);
       const names = JSON.parse(localStorage.getItem(nameKey) || '{}');
+
+      document.getElementById('export-btn').addEventListener('click', () => {
+        const data = Object.fromEntries(dataKeys.map(key => [key, localStorage.getItem(key)]).filter(([, value]) => value !== null));
+        const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }));
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `training-data-${new Date().toISOString().slice(0, 10)}.json`;
+        link.click();
+        URL.revokeObjectURL(url);
+      });
+      document.getElementById('import-btn').addEventListener('click', () => document.getElementById('import-file').click());
+      document.getElementById('import-file').addEventListener('change', async event => {
+        const file = event.target.files[0];
+        if (!file) return;
+        let data;
+        try {
+          data = JSON.parse(await file.text());
+        } catch {
+          alert('That file is not valid training data.');
+          return;
+        }
+        if (confirm('Import will overwrite your current local training data. Continue?')) {
+          dataKeys.forEach(key => { if (data[key] !== undefined) localStorage.setItem(key, data[key]); });
+          window.location.reload();
+        }
+      });
       const select = document.getElementById('exercise-select');
       const card = document.getElementById('chart-card');
       const empty = document.getElementById('empty-state');
