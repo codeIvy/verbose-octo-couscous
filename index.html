@@ -99,8 +99,11 @@
       .condition .badge { display: inline-block; padding: 5px 8px; border: 1px solid currentColor; border-radius: 999px; font-size: .68rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; }
       .secondary-button { min-height: 44px; margin: 8px 0 0 8px; padding: 9px 13px; border: 2px solid #665c54; border-radius: 9px; background: transparent; color: var(--ink); font: inherit; font-size: .9rem; font-weight: 800; cursor: pointer; }
       .secondary-button:hover { background: #504945; }
-      .exercise-actions { display: flex; gap: 8px; margin-top: 10px; }
+      .exercise-actions { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
       .exercise-actions .secondary-button, .exercise-actions .button { margin: 0; }
+      .exercise-actions .button { padding: 12px 20px; font-size: 1rem; }
+      .secondary-button:disabled, .button:disabled { opacity: .45; cursor: not-allowed; }
+      .secondary-button:disabled:hover { background: transparent; }
       .split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
       .note { padding: 27px; background: var(--panel); border-radius: var(--radius); }
       .note h3 { margin: 0 0 15px; font-size: 1.3rem; letter-spacing: -.045em; }
@@ -324,7 +327,9 @@
             round.classList.toggle('current', box === currentBox);
             round.querySelector('.round-status').textContent = box.checked ? 'Done' : box === currentBox ? 'Current' : '';
           });
-          actions.hidden = !(active && boxes.length > 0 && boxes.every(box => box.checked));
+          const baseRoundsDone = [1, 2, 3].every(n => rounds.querySelector(`#${exerciseId}-round-${n}`)?.checked);
+          actions.hidden = !(active && baseRoundsDone);
+          removeSetButton.disabled = !(state.current.active?.extraRounds?.[exerciseId] > 0);
         };
 
         const buildRound = roundNumber => {
@@ -376,7 +381,25 @@
         doneButton.className = 'button';
         doneButton.textContent = 'Set done';
         doneButton.addEventListener('click', () => exercise.nextElementSibling?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
-        actions.append(addSetButton, doneButton);
+        const removeSetButton = document.createElement('button');
+        removeSetButton.type = 'button';
+        removeSetButton.className = 'secondary-button';
+        removeSetButton.textContent = 'Remove set';
+        removeSetButton.addEventListener('click', () => {
+          if (!state.current.active) return;
+          const extraRounds = state.current.active.extraRounds;
+          const count = extraRounds?.[exerciseId] || 0;
+          if (count === 0) return;
+          const roundNumber = 3 + count;
+          const roundId = `${exerciseId}-round-${roundNumber}`;
+          rounds.querySelector(`#${roundId}`)?.closest('.round').remove();
+          delete state.current.active.rounds[roundId];
+          state.current.active.weights[exerciseId].length = roundNumber - 1;
+          extraRounds[exerciseId] = count - 1;
+          saveState();
+          updateRoundStates();
+        });
+        actions.append(addSetButton, doneButton, removeSetButton);
 
         const roundCount = 3 + (active?.extraRounds?.[exerciseId] || 0);
         for (let roundNumber = 1; roundNumber <= roundCount; roundNumber += 1) rounds.append(buildRound(roundNumber));
